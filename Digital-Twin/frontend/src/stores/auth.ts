@@ -32,4 +32,5 @@ export const useAuthStore = create<AuthState>()(
 )
 
 // API 配置
-export const API_URL = 'http://localhost:8000'
+// 本地开发使用 localhost，生产环境需配置实际后端地址
+export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'

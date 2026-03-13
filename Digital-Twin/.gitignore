@@ -24,3 +24,7 @@ data/
 # OS
 .DS_Store
 Thumbs.db
+
+# Env files
+.env
+.env.production

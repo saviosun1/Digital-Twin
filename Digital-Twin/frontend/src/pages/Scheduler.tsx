@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom'
 import './Scheduler.css'
 
 const Scheduler: React.FC = () => {
-  const { avatarId } = useParams<{ avatarId: string }>()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { avatarId: _avatarId } = useParams<{ avatarId: string }>()
 
   return (
     <div className="scheduler">

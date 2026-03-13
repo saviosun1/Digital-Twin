@@ -40,7 +40,8 @@ const Home: React.FC = () => {
               <h3>智能对话</h3>
               <p>分身能够以你的语气和风格与他人自然交流</p>
             </div>
-            <div className="feature-icon">⏰</div>
+            <div className="feature-card">
+              <div className="feature-icon">⏰</div>
               <h3>定时消息</h3>
               <p>预设重要时刻的祝福与提醒，跨越时间的关怀</p>
             </div>

@@ -12,7 +12,7 @@ interface Message {
 const Chat: React.FC = () => {
   const { avatarId } = useParams<{ avatarId: string }>()
   const navigate = useNavigate()
-  const { token, user } = useAuthStore()
+  const { token } = useAuthStore()
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
