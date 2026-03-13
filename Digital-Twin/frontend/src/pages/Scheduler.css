@@ -1,0 +1,23 @@
+.scheduler {
+  padding: 2rem 1rem;
+}
+
+.scheduler-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.scheduler-header h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.scheduler-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 1rem;
+  border: 2px dashed #e5e7eb;
+}
