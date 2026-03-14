@@ -9,6 +9,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel, EmailStr
 from jose import JWTError, jwt
 import bcrypt
+from openai import OpenAI
 from dotenv import load_dotenv
 
 # 加载环境变量
@@ -374,23 +375,62 @@ def get_questionnaire(avatar_id: str, current_user: dict = Depends(get_current_u
 # 对话
 @app.post("/chat")
 def chat(request: ChatRequest, current_user: dict = Depends(get_current_user)):
-    """与数字分身对话"""
+    """与数字分身对话 - 接入 Kimi API"""
     avatar = load_avatar(request.avatar_id)
     if not avatar:
         raise HTTPException(status_code=404, detail="Avatar not found")
     
+    # 检查是否是该用户的分身
+    if avatar["user_id"] != current_user["id"]:
+        raise HTTPException(status_code=403, detail="Not authorized to access this avatar")
+    
     # 加载问卷数据用于构建人格
     questionnaire = load_questionnaire(request.avatar_id)
     
-    # 构建简单的人格描述
-    persona = f"你是{avatar['name']}的数字分身。"
+    # 构建系统提示词（人格描述）
+    system_prompt = f"""你是"{avatar['name']}"的数字分身。你的任务是模仿{avatar['name']}的说话方式、性格特点、价值观和记忆来回复消息。
+
+要求：
+1. 用第一人称"我"来回复
+2. 语气、用词要符合原人物的性格特点
+3. 基于提供的个人信息来回答相关问题
+4. 如果不确定某事，就按照原人物的性格给出合理的回应
+5. 保持自然、真诚的对话风格"""
+
     if questionnaire:
-        answers = [f"Q: {q['question']}\nA: {q['answer']}" for q in questionnaire.values()]
-        persona += "\n\n以下是关于你的一些信息：\n" + "\n".join(answers[:5])
+        system_prompt += "\n\n以下是关于你（原人物）的一些个人信息：\n"
+        for q in questionnaire.values():
+            system_prompt += f"- {q['question']}：{q['answer']}\n"
     
-    # TODO: 集成 Kimi API
-    # 暂时返回模拟回复
-    response = f"[这是{avatar['name']}的分身] 我收到了你的消息：\"{request.message[:50]}...\"\n\n（注意：原型版本，尚未接入 AI 对话）"
+    # 获取 Kimi API Key
+    kimi_api_key = os.getenv("KIMI_API_KEY")
+    if not kimi_api_key:
+        # 如果没有设置 API Key，返回模拟回复
+        response = f"[这是{avatar['name']}的分身] 我收到了你的消息：\"{request.message[:50]}...\"\n\n（注意：Kimi API Key 未设置，暂时无法接入 AI 对话）"
+    else:
+        try:
+            # 初始化 Kimi 客户端（兼容 OpenAI 接口）
+            client = OpenAI(
+                api_key=kimi_api_key,
+                base_url="https://api.moonshot.cn/v1"
+            )
+            
+            # 调用 Kimi API
+            completion = client.chat.completions.create(
+                model="moonshot-v1-8k",  # Kimi 模型
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": request.message}
+                ],
+                temperature=0.7,
+                max_tokens=1000
+            )
+            
+            response = completion.choices[0].message.content
+            
+        except Exception as e:
+            # API 调用失败，返回错误信息
+            response = f"[系统提示] AI 对话暂时不可用：{str(e)}"
     
     # 保存聊天记录
     conv_dir = os.path.join(get_avatar_dir(request.avatar_id), "conversations")
