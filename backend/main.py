@@ -28,9 +28,20 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 app = FastAPI(title="Digital Twin API", version="0.1.0")
 
 # CORS
+origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "https://saviosun1.github.io",
+    "https://saviosun1.github.io/Digital-Twin",
+]
+# 从环境变量读取额外允许的域名
+allowed_origins = os.getenv("ALLOWED_ORIGINS", "")
+if allowed_origins:
+    origins.extend(allowed_origins.split(","))
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
