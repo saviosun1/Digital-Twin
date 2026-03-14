@@ -1,0 +1,30 @@
+# Digital Twin 原型
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+venv/
+env/
+.env
+
+# Node
+node_modules/
+dist/
+*.log
+
+# Data (用户数据，不提交到 git)
+data/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env files
+.env
+.env.production

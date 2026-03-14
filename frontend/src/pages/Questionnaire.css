@@ -1,0 +1,47 @@
+.questionnaire {
+  padding: 2rem 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.questionnaire-header {
+  margin-bottom: 2rem;
+}
+
+.questionnaire-header h1 {
+  margin-bottom: 1rem;
+}
+
+.progress-text {
+  text-align: right;
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.question-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.question-number {
+  color: var(--primary-color);
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.question-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}
+
+.question-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
