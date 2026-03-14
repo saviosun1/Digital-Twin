@@ -115,12 +115,22 @@ def save_questionnaire(avatar_id: str, data: dict):
 
 # ============== 认证相关 ==============
 
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """验证密码"""
+    try:
+        if isinstance(plain_password, str):
+            plain_password = plain_password.encode('utf-8')
+        if isinstance(hashed_password, str):
+            hashed_password = hashed_password.encode('utf-8')
+        return bcrypt.checkpw(plain_password, hashed_password)
+    except Exception:
+        return False
 
-def get_password_hash(password):
-    # bcrypt has a maximum password length of 72 bytes
-    return pwd_context.hash(password[:72])
+def get_password_hash(password: str) -> str:
+    """生成密码哈希 - bcrypt 限制 72 字节"""
+    password_bytes = password.encode('utf-8')[:72]
+    hashed = bcrypt.hashpw(password_bytes, bcrypt.gensalt())
+    return hashed.decode('utf-8')
 
 def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
