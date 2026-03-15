@@ -19,8 +19,11 @@ load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key-change-this")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_DAYS = 7
-DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
+
+# 数据目录：优先从环境变量读取（Railway Volume），否则使用项目目录
+DATA_DIR = os.getenv("DATA_DIR", os.path.join(os.path.dirname(__file__), "..", "data"))
 os.makedirs(DATA_DIR, exist_ok=True)
+print(f"Data directory: {DATA_DIR}")
 
 # 密码加密函数
 def verify_password(plain_password: str, hashed_password: str) -> bool:
