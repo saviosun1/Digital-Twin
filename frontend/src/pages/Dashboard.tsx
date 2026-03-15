@@ -89,6 +89,12 @@ const Dashboard: React.FC = () => {
                     编辑问卷
                   </Link>
                   <Link 
+                    to={`/avatar/${avatar.id}/enrich`} 
+                    className="btn btn-secondary btn-sm"
+                  >
+                    丰富人格
+                  </Link>
+                  <Link 
                     to={`/chat/${avatar.id}`} 
                     className="btn btn-primary btn-sm"
                   >

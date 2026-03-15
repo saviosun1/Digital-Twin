@@ -8,6 +8,7 @@ import AvatarCreate from './pages/AvatarCreate'
 import Questionnaire from './pages/Questionnaire'
 import Chat from './pages/Chat'
 import Scheduler from './pages/Scheduler'
+import PersonalityEnrich from './pages/PersonalityEnrich'
 import './App.css'
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
         <Route path="/avatar/create" element={<Layout><AvatarCreate /></Layout>} />
         <Route path="/avatar/:id/questionnaire" element={<Layout><Questionnaire /></Layout>} />
+        <Route path="/avatar/:id/enrich" element={<Layout><PersonalityEnrich /></Layout>} />
         <Route path="/chat/:avatarId" element={<Layout><Chat /></Layout>} />
         <Route path="/scheduler/:avatarId" element={<Layout><Scheduler /></Layout>} />
       </Routes>
